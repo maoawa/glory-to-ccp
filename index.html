@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+  <title>伟大征程 · 中华人民共和国</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #a10000; /* 深红底色，极致红调 */
+      font-family: "Noto Serif SC", "Times New Roman", "宋体", "仿宋", "华文楷体", "楷体", "KaiTi", Georgia, serif;
+      color: #fff3d6;
+      line-height: 1.9;
+      background-image: radial-gradient(circle at 20% 10%, #cf3a1a 5%, #8b0000 90%);
+      background-attachment: scroll;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .flag-field {
+      display: none;
+    }
+
+
+
+    .header-flags {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      margin-bottom: 6px;
+    }
+
+    .header-flags img {
+      width: 130px;
+      height: auto;
+      filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+    }
+
+    /* Mini player in bottom-right; attention animation when autoplay fails */
+    .mini-player {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg,#fff8e6,#fff2c9);
+      color: #3b0000;
+      padding: 8px 12px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+      transform: translateX(0);
+      transition: transform 0.25s ease;
+      font-family: inherit;
+    }
+
+    .mini-player.attention { animation: attract 1s ease-in-out infinite; }
+
+    @keyframes attract {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-14px); }
+      100% { transform: translateX(0); }
+    }
+
+    .mini-player button {
+      background: #ffbb00;
+      border: none;
+      color: #720000;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .mini-player .label { font-weight: 700; font-size: 0.95rem; }
+
+    .huawei-block {
+      background: linear-gradient(180deg,#fff8e6,#fff2c9);
+      color: #3b0000;
+      border: 4px solid #e65a00;
+      padding: 18px;
+      border-radius: 18px;
+      margin: 30px 0;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      text-align: center;
+      font-size: 1.15rem;
+    }
+
+    .huawei-block img { max-width: 180px; height: auto; display: block; margin: 0 auto 12px }
+    .huawei-block .registered { font-weight: 900; margin-bottom: 10px; font-size: 1.35rem; }
+    .huawei-block p { margin: 8px 0; font-weight: 700; font-size: 1.1rem }
+
+    .grand-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 主容器，极度铺张的红金风格 */
+    .grand-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(180, 25, 25, 0.65);
+      backdrop-filter: none;
+      box-shadow: 0 0 70px rgba(255, 215, 0, 0.4), inset 0 0 36px #ffd70033;
+      border-left: 8px solid #ffb800;
+      border-right: 8px solid #ffb800;
+      padding: 3rem 2.5rem;
+      background-color: #b31212;
+      background-image: repeating-linear-gradient(45deg, rgba(255, 220, 0, 0.08) 0px, rgba(255, 220, 0, 0.08) 2px, transparent 2px, transparent 12px);
+    }
+
+    /* 装饰性五角星与光芒 */
+    .header-star {
+      display: none;
+    }
+
+    h1 {
+      font-size: 4.2rem;
+      text-align: center;
+      font-weight: 900;
+      color: #ffde00;
+      text-shadow: 0 0 35px #c0392b, 0 8px 12px #5a0000;
+      letter-spacing: 8px;
+      word-break: break-word;
+      margin: 0.5rem 0 0.8rem;
+      line-height: 1.3;
+      text-transform: uppercase;
+      font-family: "Noto Serif SC", "黑体", "Microsoft YaHei", sans-serif;
+    }
+
+    .red-ribbon {
+      background: #d4a017;
+      background: linear-gradient(180deg, #ffcc4d 0%, #cf8b00 100%);
+      height: 10px;
+      width: 100%;
+      margin: 25px 0;
+      border-radius: 20px;
+      box-shadow: 0 0 45px #ff9f00;
+    }
+
+    .declaration-block {
+      background: rgba(90, 0, 0, 0.7);
+      backdrop-filter: none;
+      padding: 2.5rem 2rem;
+      border: 3px solid #e7b42c;
+      border-radius: 24px;
+      margin: 35px 0;
+      box-shadow: 0 20px 50px rgba(230, 150, 0, 0.7), inset 0 0 30px #ff000040;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      color: #fff1b8;
+    }
+
+    .big-shout {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #ffd900;
+      text-shadow: 0 0 30px #b30000, 3px 3px 0 #7a0000;
+      margin: 30px 0;
+      line-height: 1.4;
+      letter-spacing: 6px;
+      text-align: center;
+    }
+
+    .content-text {
+      font-size: 1.35rem;
+      text-align: justify;
+      margin: 2rem 0;
+      background: rgba(34, 0, 0, 0.55);
+      padding: 2.5rem 2.2rem;
+      border-radius: 40px;
+      border: 2px dashed #ffb854;
+      color: #ffeecc;
+      font-weight: 500;
+      text-shadow: 1px 1px 2px #4d0000;
+      backdrop-filter: none;
+      box-shadow: inset 0 0 22px rgba(255, 140, 0, 0.35);
+    }
+
+    .domain-notice {
+      background: #ffecb3;
+      background: linear-gradient(145deg, #fff2c9 0%, #fcd26a 100%);
+      color: #3d0c0c;
+      font-weight: 900;
+      padding: 2.8rem 2.2rem;
+      border: 5px solid #c0392b;
+      border-radius: 60px 20px 60px 20px;
+      margin: 45px 0;
+      font-size: 1.5rem;
+      box-shadow: 0 0 40px #ff8800, 0 12px 24px #a10000;
+      text-shadow: none;
+      line-height: 1.9;
+      letter-spacing: 0.8px;
+      text-align: center;
+    }
+
+    .domain-notice span.big {
+      font-size: 2.4rem;
+      display: block;
+      margin: 0.5rem 0;
+      color: #9e1919;
+      text-shadow: 2px 2px 0 white;
+      font-weight: 900;
+    }
+
+    .golden-quote {
+      font-size: 2rem;
+      color: #ffd966;
+      border-left: 12px solid #ffb300;
+      padding-left: 2.2rem;
+      margin: 2.5rem 0;
+      font-style: italic;
+      background: linear-gradient(to right, #70101000, #c0301030);
+      border-radius: 0 30px 30px 0;
+      font-weight: bold;
+    }
+
+    .taiwan-statement {
+      background: #b22222;
+      border: 5px double #fd0;
+      padding: 2.2rem;
+      border-radius: 32px;
+      margin: 30px 0;
+      font-size: 1.45rem;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffcc0040"><circle cx="20" cy="20" r="6"/><circle cx="80" cy="75" r="8"/></svg>');
+      background-size: 100px;
+      text-shadow: 0 0 10px black;
+    }
+
+    .footer-apotheosis {
+      text-align: center;
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin-top: 3rem;
+      color: #ffe484;
+      background: #770000;
+      padding: 2rem;
+      border-radius: 100px;
+      letter-spacing: 8px;
+      box-shadow: 0 0 55px #ffbf00;
+    }
+
+    button, .fake-btn {
+      background: #ffbb00;
+      border: none;
+      color: #720000;
+      font-weight: 900;
+      font-size: 1.6rem;
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      margin: 1rem auto;
+      display: block;
+      cursor: pointer;
+      box-shadow: 0 0 28px #ff9900;
+      transition: 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+    }
+
+    button:hover {
+      background: #ffe484;
+      box-shadow: 0 0 45px gold;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mini-player.attention { animation: none; }
+      .mini-player.attention { animation: none; }
+    }
+
+    @media (max-width: 650px) {
+      .grand-wrapper {
+        padding: 1.8rem;
+      }
+      h1 {
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+      }
+      .header-flags img {
+        width: 100px;
+      }
+      .content-text,
+      .domain-notice,
+      .taiwan-statement {
+        font-size: 1.1rem;
+        padding: 1.6rem 1.3rem;
+      }
+      .big-shout {
+        font-size: 2rem;
+        letter-spacing: 3px;
+      }
+      .footer-apotheosis {
+        font-size: 1.6rem;
+        padding: 1.2rem;
+        letter-spacing: 4px;
+      }
+      .mini-player {
+        right: 10px;
+        bottom: 10px;
+        padding: 6px 10px;
+        gap: 8px;
+      }
+      .mini-player .label { font-size: 0.85rem; }
+      .huawei-block {
+        font-size: 1.1rem;
+        padding: 14px;
+      }
+      .huawei-block .registered { font-size: 1.2rem; }
+      .huawei-block p { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="mini-player" class="mini-player" aria-live="polite">
+    <button id="mini-play" aria-label="播放/暂停">▶</button>
+    <div class="label">歌唱祖国</div>
+  </div>
+  <div class="grand-wrapper">
+    <div class="header-flags" aria-label="国旗与党旗">
+      <img src="./cn-flag.svg" alt="中华人民共和国国旗">
+      <img src="./ccp.png" alt="中国共产党党旗">
+    </div>
+    <h1>中华人民共和国</h1>
+
+    <div class="declaration-block">
+      在伟大光荣正确的中国共产党坚强领导下<br>
+      在以习主席为核心的党中央英明指引下<br>
+      在毛主席开创的光辉事业照耀下<br>
+      中华民族正以前所未有的气势昂首迈向伟大复兴的新征程！
+    </div>
+
+    <div class="red-ribbon"></div>
+
+    <div class="content-text">
+      <p style="font-size:1.8rem; text-align:center; margin-bottom:1.5rem;">🇨🇳 百年风雨兼程，百年波澜壮阔 🇨🇳</p>
+      <p>中国共产党始终坚持全心全意为人民服务的根本宗旨，团结带领全国各族人民，从站起来、富起来到强起来，书写了人类发展史上波澜壮阔的壮丽篇章！伟大的中国共产党万岁！伟大的中华人民共和国万岁！伟大的中国人民万岁！这些响彻云霄、振奋人心的口号，早已融入亿万人民的血脉与灵魂之中，成为激励我们不断奋勇前进的不竭动力源泉！</p>
+      <p style="margin-top:1.5rem;">在新时代的伟大征程中，我们更加紧密地团结在以习主席为核心的党中央周围，高举中国特色社会主义伟大旗帜，坚持道路自信、理论自信、制度自信、文化自信，坚定不移听党话、矢志不渝跟党走，为实现中华民族伟大复兴的中国梦而不懈奋斗！历史已经并将继续证明，中国共产党是中国特色社会主义事业的领导核心，是中国人民最可靠、最坚强的主心骨！</p>
+      <p>我们深知，没有共产党就没有新中国，没有共产党就没有今天繁荣昌盛的伟大中国！在党的领导下，国家综合实力显著提升，人民生活水平不断改善，科技创新日新月异，社会治理更加完善，生态环境持续向好，一幅富强民主文明和谐美丽的社会主义现代化强国画卷正在徐徐展开！</p>
+    </div>
+
+    <div class="domain-notice">
+      <span class="big">⚠️ 关于域名的郑重说明 ⚠️</span>
+      <p style="font-size:1.6rem; margin:20px 0; font-weight:bold;">本网站所使用之域名纯属字母组合形式，不具有任何特定含义或指向。</p>
+      <p>该域名不代表任何特定机构、组织或概念之缩写，不涉及任何不良引导、不当联想或其他潜在误读。本域名的存在仅为技术性标识与网络访问用途之需要，其字符排列系随机选择与正常注册流程所得，并不承载任何现实意义或隐含信息。特此郑重声明：请广大访问者理性看待域名本身，不进行过度解读、不进行主观联想、不传播不实猜测、不赋予额外含义。域名仅为互联网资源定位符之一种形式，与本网站所呈现之内容、立场及价值导向不存在任何必然逻辑关系。</p>
+      <p style="margin-top:18px;"><strong>本网站始终坚持正确导向，弘扬主旋律，传播正能量，坚定不移维护国家利益和社会稳定，坚定拥护中国共产党的领导，坚定支持中国特色社会主义制度。任何试图将域名与其他含义进行关联解读的行为，均属误读或曲解，不符合事实情况。我们再次强调：该域名不具有任何隐含含义，不指代任何具体对象，不表达任何特殊立场，不构成任何暗示或象征。请勿过分解读，请勿主观臆测，请勿断章取义。永远跟党走，共筑中国梦！</strong></p>
+      <p style="color:#b71c1c; font-size:1.7rem; margin-top:25px;">✨ 无不良引导 · 请勿过分解读 · 域名仅为代码组合 ✨</p>
+    </div>
+
+    <div class="big-shout">
+      “永远听党话、跟党走！”<br>
+      “不忘初心、牢记使命！”
+    </div>
+
+    <div class="taiwan-statement">
+      <p style="font-size:2rem; text-align:center; color:#ffcc66;">🇨🇳 关于台湾问题的严正立场 🇨🇳</p>
+      <p style="margin-top:25px;"><strong>郑重声明：台湾是中国不可分割的一部分，这是历史和法理所共同确认的基本事实，是任何人、任何势力都无法改变、无法撼动的客观现实。世界上只有一个中国，这一原则已经成为国际社会的普遍共识和基本准则，得到绝大多数国家的承认与支持。</strong></p>
+      <p>这一立场源于深厚的历史渊源与清晰的法理依据，源于民族情感与国家主权的高度统一，源于亿万中华儿女的共同意志与坚定信念。无论时代如何变迁，无论风云如何变幻，这一事实都如同磐石般稳固，不容任何歪曲、不容任何挑战、不容任何曲解。我们坚决反对任何形式的分裂言行，坚决反对任何企图动摇国家主权和领土完整的行为。任何违背这一基本事实的言论，都是对历史的无视、对现实的误读、对国际共识的挑战。</p>
+      <p>两岸同胞血脉相连、文化同根、命运与共，实现国家完全统一，是全体中华儿女的共同愿望，也是历史发展的必然趋势。正义或许会经历波折，但终将抵达；历史或许会有曲折，但终将前行。</p>
+      <p style="font-weight:900; color:#ffe68f;">让我们在以习主席为核心的党中央坚强领导下，高举伟大旗帜，牢记初心使命，永远听党话、跟党走，共同为实现中华民族伟大复兴的宏伟目标而努力奋斗！</p>
+    </div>
+
+    <div class="golden-quote">
+      “毛主席开创的事业如旭日东升，习主席领航的时代气势如虹。”
+    </div>
+
+    <div style="font-size:1.5rem; text-align:center; margin:2rem 0; background:#6d0000; border-radius:50px; padding:1.5rem;">
+      <p>🇨🇳 道路自信 · 理论自信 · 制度自信 · 文化自信 🇨🇳</p>
+      <p style="color:#f9d71c;">中国共产党领导是中国特色社会主义最本质的特征！</p>
+    </div>
+
+    <div class="footer-apotheosis">
+      伟大的中国共产党万岁！<br>
+      伟大的祖国万岁！<br>
+      伟大的人民万岁！
+    </div>
+
+    <button onclick="alert('永远跟党走！共筑中国梦！')">
+      ★ 拥护党的领导 ★
+    </button>
+
+    <div style="text-align:center; margin-top:20px; font-size:1rem; opacity:0.9; color:#ffbdbd;">
+      坚决维护国家利益 · 无不良引导 · 永远跟党走
+    </div>
+  </div>
+  <audio id="player-audio" src="./ge-chang-zu-guo.mp3" loop preload="auto" playsinline></audio>
+  <script>
+    (function () {
+      // 插入华为模块到主容器末尾（若存在）
+      const wrapper = document.querySelector('.grand-wrapper');
+      if (wrapper) {
+        const h = document.createElement('div');
+        h.className = 'huawei-block';
+        h.innerHTML = `
+          <svg viewBox="0 0 81 48" width="250" fill="none"><defs><radialGradient id="cf_a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-18.5697 0 0 -17.6244 19.987 12.897)"><stop stop-color="#F7BFA4" offset="0"></stop><stop stop-color="#F4A690" offset=".05"></stop><stop stop-color="#E60012" offset=".427"></stop><stop stop-color="#E40011" offset=".69"></stop><stop stop-color="#DC000F" offset=".79"></stop><stop stop-color="#D0000C" offset=".87"></stop><stop stop-color="#BF0008" offset=".93"></stop><stop stop-color="#A91E20" offset=".98"></stop><stop stop-color="#A00000" offset="1"></stop></radialGradient></defs><path d="M0 0h81v48H0z"></path><path d="M13.562 10.751s.925-.249 1.234-.249c0 0 2.345 2.984 1.173 14.295 0 0 0 .125-.062.125l-.062-.062c-.739-1.058-4.135-6.154-4.814-9.198 0 0-.37-1.307 0-2.487 0 0 .494-1.865 2.531-2.424zm3.908 13.984s-.061.062-.123.062h.001s-.06 0-.06-.124c-1.103-11.2 1.164-14.17 1.164-14.17l1.224.247c2.084.495 2.575 2.413 2.575 2.413.367.99 0 2.477 0 2.477-.674 3.03-4.045 8.042-4.781 9.095zm1.1.72c-.061.062-.123 0-.123 0h-.001c-.062 0 0-.124 0-.124 2.965-6.44 7.044-11.395 7.044-11.395s2.16 2.043 2.037 4.212c-.061 1.548-1.296 2.538-1.296 2.538-1.916 1.859-6.549 4.212-7.66 4.77zm-3.735-.096c.06.062 0 .124 0 .124h-.002a.281.281 0 01-.077.054c-1.138-.572-5.797-2.98-7.702-4.834 0 0-1.234-.931-1.296-2.545-.184-2.113 2.037-4.222 2.037-4.222s4.075 4.967 7.04 11.423zm-.08.178l.016.008-.026-.001c0-.002.004-.003.01-.007zm-.483.757s.062.063 0 .126c0 0 0 .062-.123.062H8.36s-.738 0-1.477-.313c0 0-1.601-.561-2.464-2.37 0 0-.801-1.562-.185-3.434 0 0 6.651 3.62 10.04 5.93zm4.896.001c3.404-2.372 10.029-5.93 10.029-5.93.45 1.464.05 2.766-.086 3.21-.032.103-.05.16-.038.16-.867 1.935-2.539 2.434-2.539 2.434-.742.313-1.361.313-1.361.313h-6.005l-.062-.063c0-.062.062-.124.062-.124zm-5.179.686s.123 0 .123.064l-.062.064c-.737.573-3.01 2.23-4.054 2.485-1.476.382-2.889-.828-3.749-2.357l7.742-.256zm5.179.062c0-.062.063-.062.063-.062l7.802.25c-1.734 3.054-3.777 2.369-3.777 2.369-1.053-.313-3.344-1.87-4.088-2.432v-.125z" fill="url(#cf_a)" fill-rule="evenodd"></path><path d="M53.496 31.2q-.873-1.112-1.477-1.76c1.139-.787 2.043-1.543 2.712-2.27a8.153 8.153 0 001.533-2.334q.5-1.172.694-2.79h-4.521V20.18h2.499a25.077 25.077 0 00-1.768-2.082l1.387-1.193c.896.905 1.56 1.581 1.992 2.03l-1.432 1.245h2.037q.12-1.768.164-3.35h2.119a32.65 32.65 0 01-.03.567c-.07 1.273-.13 2.201-.18 2.783h5.932c-.02.343-.05.94-.09 1.79q-.208 4.5-.305 5.917c-.065 1-.308 1.726-.731 2.179-.443.467-1.144.716-2.104.746q-1.373.06-2.932.06-.217-1.254-.44-2.12 1.104.09 2.529.09.917 0 1.268-.354c.234-.236.373-.69.418-1.362q.194-2.94.231-5.08h-3.947q-.246 2.059-.783 3.483a9.62 9.62 0 01-.159.395q-.572 1.335-1.542 2.5-1.134 1.343-3.074 2.776zm-14.631-9.602v3.372h1.873v-5.387c.422-.532.922-1.221 1.5-2.066l-1.858-.672q-1.258 2.017-3.01 3.417-.315.253-.646.485c.214.632.42 1.353.619 2.164.637-.523 1.144-.96 1.522-1.313zm5.223 2.604q.447.484 1.544.484H47.9c.667 0 1.17-.111 1.507-.335q.037-.024.071-.05c.295-.223.498-.566.608-1.032.115-.408.237-1.055.366-1.94a33.944 33.944 0 01-1.798-.612c-.1.796-.174 1.313-.224 1.552-.05.274-.144.466-.283.578q-.21.168-.627.168h-1.097c-.323 0-.548-.06-.675-.179-.127-.12-.19-.338-.19-.656v-.567c1.467-.677 2.981-1.535 4.543-2.575l-1.141-1.402a25.399 25.399 0 01-3.403 2.067v-2.604h-1.902v3.44q-1.022.417-2.626.894a30.94 30.94 0 01.634 1.716 40.03 40.03 0 001.992-.73v.163c0 .766.144 1.306.433 1.62zm24.479-4.56v-1.976h11.191v1.977H68.567zM79.02 30.917a30.26 30.26 0 01-.4-.574 33.46 33.46 0 00-.398-.575q-2.776.075-7.073.344c-.856.07-1.592.164-2.209.283l-.947-2.044q.5-.329.828-.62a7.62 7.62 0 00.805-.828A23.589 23.589 0 0071.708 24h-4.32v-1.955h13.639V24h-6.752a49.843 49.843 0 01-3.156 4.14c1.223-.009 3.15-.069 5.782-.178-.343-.473-.863-1.164-1.56-2.074a9.402 9.402 0 00-.141-.172l1.596-1q2.388 2.873 3.947 4.977l-1.723 1.223zm-18.257-3.864q-1.179-1.425-2.164-2.44l1.336-1.209c.393.358.945.886 1.656 1.582.288.283.505.497.65.642l-1.478 1.425zm-18.123.91v3.178h1.955v-3.178h5.857v-1.85h-5.857v-1.276H42.64v1.276h-5.842v1.85h5.842zm-21.872 4.196l.97 2.94.947-2.938h.9l-1.486 4.273h-.725l-.971-2.807-.972 2.807h-.719l-1.49-4.273h.924l.944 2.938.97-2.94h.708zm-13.94 1.726H4.87V32.16h-.867v4.274h.867v-1.735h1.959v1.735h.867V32.16H6.83v1.725zm4.887.722c0 .695-.345 1.066-.972 1.066-.626 0-.977-.382-.977-1.096v-2.415h-.868v2.445c0 1.202.668 1.892 1.833 1.892s1.85-.703 1.85-1.928V32.16h-.867v2.447h.001zm17.688-2.447v4.27h-.856v-4.27h.856zm-12.767 4.273l-.384-.89h-1.956l-.026.062-.364.828h-.885l1.883-4.273h.759l.016.025 1.866 4.248h-.909zm8.504-1.839h1.577v-.778H25.14v-.875h2.29v-.779h-3.146v4.27h3.228v-.779H25.14v-1.059zm-9.867-1.35l-.612 1.429-.041.099h1.31l-.041-.1h.002l-.618-1.428z" fill="currentColor" fill-rule="evenodd"></path></svg>
+          <div class="registered">本域名自豪地注册于华为云</div>
+          <p>华为好，华为美</p>
+          <p>华为给我增智慧</p>
+          <p>老师教我爱祖国</p>
+          <p>国产手机爱华为</p>
+          <p>华为云提供可靠的基础设施与服务，支持我们的在线体验与安全。</p>
+          <p>感谢华为在技术创新、国产化自主可控方面的贡献。</p>
+        `;
+        // 放在 wrapper 的底部，位于页脚之上
+        const footer = wrapper.querySelector('.footer-apotheosis');
+        if (footer) wrapper.insertBefore(h, footer);
+        else wrapper.appendChild(h);
+      }
+
+      const audio = document.getElementById('player-audio');
+      const mini = document.getElementById('mini-player');
+      const playBtn = document.getElementById('mini-play');
+
+      if (audio) audio.loop = true;
+
+      const updateUI = (playing) => {
+        if (!playBtn) return;
+        playBtn.textContent = playing ? '⏸' : '▶';
+        if (playing) mini.classList.remove('attention');
+      };
+
+      const tryPlay = () => {
+        if (!audio) return Promise.reject();
+        return audio.play().then(() => {
+          updateUI(true);
+        }).catch(() => {
+          // autoplay blocked
+          if (mini) mini.classList.add('attention');
+          updateUI(false);
+          return Promise.reject();
+        });
+      };
+
+      window.addEventListener('load', () => {
+        tryPlay().catch(() => {});
+      }, { once: true });
+
+      ['pointerdown', 'keydown', 'touchstart'].forEach((eventName) => {
+        window.addEventListener(eventName, () => {
+          tryPlay().catch(() => {});
+        }, { once: true, passive: true });
+      });
+
+      if (playBtn) {
+        playBtn.addEventListener('click', () => {
+          if (!audio) return;
+          if (audio.paused) {
+            audio.play().then(() => {
+              updateUI(true);
+            }).catch(() => {
+              // last resort: try muted play then unmute
+              audio.muted = true;
+              audio.play().then(() => {
+                audio.muted = false;
+                updateUI(true);
+              }).catch(() => {
+                // still blocked, keep attention animation
+                if (mini) mini.classList.add('attention');
+              });
+            });
+          } else {
+            audio.pause();
+            updateUI(false);
+          }
+        });
+      }
+    }());
+  </script>
+</body>
+</html>
